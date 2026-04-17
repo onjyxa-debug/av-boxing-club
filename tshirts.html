@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T-Shirts – AV Boxing Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080808; --red: #CC2222; --red-dark: #8e1515;
+    --white: #f2ede8; --gray: #161616; --gray-mid: #222222;
+    --border: rgba(255,255,255,0.07); --text-muted: #777;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+  /* NAV */
+  .announce-bar { background: var(--red); text-align: center; padding: 10px 24px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); }
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(8,8,8,0.97); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+  .nav-inner { max-width: 1300px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 40px; gap: 24px; }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 0.1em; color: var(--white); text-decoration: none; }
+  .nav-logo span { color: var(--red); }
+  .nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
+  .nav-links a { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.82rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(242,237,232,0.7); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a.active { color: var(--white); border-bottom: 2px solid var(--red); padding-bottom: 2px; }
+  .nav-shop-btn { background: var(--red); color: var(--white) !important; padding: 9px 22px; }
+  .nav-shop-btn:hover { background: var(--red-dark) !important; }
+
+  /* BREADCRUMB */
+  .breadcrumb { max-width: 1300px; margin: 0 auto; padding: 20px 40px 0; display: flex; align-items: center; gap: 10px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--red); }
+  .breadcrumb span { color: var(--white); }
+
+  /* PAGE HEADER */
+  .page-header { max-width: 1300px; margin: 0 auto; padding: 40px 40px 0; }
+  .page-header-inner { border-bottom: 1px solid var(--border); padding-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; }
+  .section-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.72rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--red); display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .section-label::before { content: ''; display: block; width: 24px; height: 1.5px; background: var(--red); }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 6vw, 80px); letter-spacing: 0.02em; line-height: 1; }
+  .product-count { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+
+  /* PRODUCT GRID */
+  .product-section { max-width: 1300px; margin: 0 auto; padding: 48px 40px 96px; }
+  .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+
+  /* PRODUCT CARD */
+  .product-card { background: var(--gray); cursor: pointer; transition: transform 0.25s; position: relative; }
+  .product-card:hover { transform: translateY(-4px); }
+  .product-img-wrap { aspect-ratio: 1/1; background: var(--gray-mid); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; transition: transform 0.4s; }
+  .product-card:hover .product-img-wrap img { transform: scale(1.05); }
+  .product-emoji { font-size: 7rem; opacity: 0.6; transition: transform 0.4s; }
+  .product-card:hover .product-emoji { transform: scale(1.08); }
+  .product-badge { position: absolute; top: 14px; left: 14px; background: var(--red); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 5px 12px; color: var(--white); z-index: 2; }
+  .product-info { padding: 24px 24px 28px; border-top: 1px solid var(--border); }
+  .product-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.15rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white); margin-bottom: 6px; }
+  .product-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 18px; }
+  .product-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--white); margin-bottom: 16px; }
+  .product-price.tbd { font-size: 1rem; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.1em; color: var(--text-muted); font-style: italic; }
+
+  /* SIZE SELECTOR */
+  .size-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .size-options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .size-btn { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.1em; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); background: transparent; color: rgba(242,237,232,0.6); cursor: pointer; transition: all 0.2s; }
+  .size-btn:hover { border-color: var(--white); color: var(--white); }
+  .size-btn.selected { border-color: var(--red); background: var(--red); color: var(--white); }
+
+  /* ADD TO CART */
+  .add-cart-btn { width: 100%; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.88rem; letter-spacing: 0.14em; text-transform: uppercase; background: var(--red); color: var(--white); border: none; padding: 14px; cursor: pointer; transition: background 0.2s; }
+  .add-cart-btn:hover { background: var(--red-dark); }
+  .add-cart-btn:disabled { background: var(--gray-mid); color: var(--text-muted); cursor: not-allowed; }
+
+  /* CART DRAWER */
+  .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+  .cart-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 420px; max-width: 100vw; background: var(--gray); z-index: 201; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; }
+  .cart-drawer.open { transform: translateX(0); }
+  .cart-header { padding: 28px 32px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .cart-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.04em; }
+  .cart-close { background: none; border: none; color: var(--white); font-size: 1.5rem; cursor: pointer; opacity: 0.6; transition: opacity 0.2s; }
+  .cart-close:hover { opacity: 1; }
+  .cart-items { flex: 1; overflow-y: auto; padding: 24px 32px; display: flex; flex-direction: column; gap: 16px; }
+  .cart-empty { text-align: center; padding: 60px 0; color: var(--text-muted); font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  .cart-item { display: flex; gap: 16px; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .cart-item-emoji { width: 64px; height: 64px; background: var(--gray-mid); display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; }
+  .cart-item-details { flex: 1; }
+  .cart-item-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .cart-item-size { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; }
+  .cart-item-remove { background: none; border: none; color: var(--text-muted); font-size: 0.75rem; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: color 0.2s; padding: 0; }
+  .cart-item-remove:hover { color: var(--red); }
+  .cart-footer { padding: 24px 32px; border-top: 1px solid var(--border); }
+  .cart-note { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; font-style: italic; text-align: center; }
+  .cart-checkout-btn { width: 100%; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.14em; text-transform: uppercase; background: var(--red); color: var(--white); border: none; padding: 16px; cursor: pointer; transition: background 0.2s; }
+  .cart-checkout-btn:hover { background: var(--red-dark); }
+
+  /* CART ICON IN NAV */
+  .cart-nav-btn { background: none; border: 1px solid var(--border); color: var(--white); font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 18px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: border-color 0.2s; }
+  .cart-nav-btn:hover { border-color: var(--red); }
+  .cart-count { background: var(--red); color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; }
+
+  /* TOAST */
+  #toast { position: fixed; bottom: 32px; right: 32px; z-index: 999; background: var(--red); color: white; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 24px; opacity: 0; transform: translateY(12px); transition: opacity 0.3s, transform 0.3s; pointer-events: none; }
+
+  /* BACK LINK */
+  .btn-ghost { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; background: transparent; color: var(--white); padding: 11px 28px; text-decoration: none; border: 1.5px solid rgba(242,237,232,0.2); transition: border-color 0.2s, color 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-ghost:hover { border-color: var(--red); color: var(--red); }
+
+  /* FOOTER */
+  footer { background: #030303; border-top: 1px solid var(--border); padding: 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; margin-top: 0; }
+  .foot-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.45rem; letter-spacing: 0.1em; color: var(--white); }
+  .foot-logo span { color: var(--red); }
+  .foot-copy { font-size: 0.78rem; color: var(--text-muted); text-align: center; }
+  .foot-links { display: flex; gap: 24px; list-style: none; }
+  .foot-links a { font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .foot-links a:hover { color: var(--red); }
+
+  .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s, transform 0.6s; }
+  .fade-up.in { opacity: 1; transform: none; }
+
+  @media (max-width: 1024px) {
+    .nav-inner { padding: 14px 20px; } .nav-links { display: none; }
+    .breadcrumb, .page-header, .product-section { padding-left: 20px; padding-right: 20px; }
+    .product-grid { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; text-align: center; } .foot-links { justify-content: center; flex-wrap: wrap; }
+    .cart-drawer { width: 100vw; }
+  }
+  @media (max-width: 600px) { .product-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="announce-bar">🥊 Official AV Boxing Club Merch — Represent the Antelope Valley</div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">AV <span>Boxing</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html#shop" class="active">Shop</a></li>
+      <li><a href="tshirts.html">T-Shirts</a></li>
+      <li><a href="hoodies.html">Hoodies</a></li>
+      <li><a href="index.html#membership">Train With Us</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <button class="cart-nav-btn" onclick="toggleCart()">
+      🛒 Cart <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Home</a>
+  <span>›</span>
+  <a href="index.html#shop">Shop</a>
+  <span>›</span>
+  <span>T-Shirts</span>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div>
+      <p class="section-label">Collection</p>
+      <h1 class="page-title">T-Shirts</h1>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:12px;">
+      <p class="product-count" id="productCount">2 Products</p>
+      <a href="index.html#shop" class="btn-ghost">← Back to Shop</a>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="product-section">
+  <div class="product-grid">
+
+    <!-- ================================================================ -->
+    <!-- PRODUCT 1                                                         -->
+    <!-- EDIT: product-name, product-desc, product-price                  -->
+    <!-- PHOTO: replace the product-emoji div with:                       -->
+    <!--   <img src="tshirt-og.jpg" alt="AV Boxing OG Tee">              -->
+    <!-- ================================================================ -->
+    <div class="product-card fade-up">
+      <div class="product-img-wrap">
+        <div class="product-emoji">👕</div> <!-- EDIT: swap for real photo -->
+        <span class="product-badge">Best Seller</span> <!-- EDIT or delete badge -->
+      </div>
+      <div class="product-info">
+        <div class="product-name">AV Boxing OG Tee</div>          <!-- EDIT: Name -->
+        <div class="product-desc">Classic logo tee. Heavy cotton. Red on black. Unisex fit.</div> <!-- EDIT: Description -->
+        <div class="product-price tbd">Price coming soon</div>     <!-- EDIT: Replace with e.g. <div class="product-price">$35</div> -->
+        <div class="size-label">Select Size</div>
+        <div class="size-options">
+          <button class="size-btn" onclick="selectSize(this)">S</button>
+          <button class="size-btn" onclick="selectSize(this)">M</button>
+          <button class="size-btn" onclick="selectSize(this)">L</button>
+          <button class="size-btn" onclick="selectSize(this)">XL</button>
+        </div>
+        <button class="add-cart-btn" onclick="addToCart(this, 'AV Boxing OG Tee', '👕')" disabled>Select a Size</button>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- PRODUCT 2                                                         -->
+    <!-- ================================================================ -->
+    <div class="product-card fade-up">
+      <div class="product-img-wrap">
+        <div class="product-emoji">👕</div>
+        <span class="product-badge">New</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">AV Boxing Tag Tee</div>
+        <div class="product-desc">Distressed tag logo. Garment dyed. Lived-in feel from day one.</div>
+        <div class="product-price tbd">Price coming soon</div>
+        <div class="size-label">Select Size</div>
+        <div class="size-options">
+          <button class="size-btn" onclick="selectSize(this)">S</button>
+          <button class="size-btn" onclick="selectSize(this)">M</button>
+          <button class="size-btn" onclick="selectSize(this)">L</button>
+          <button class="size-btn" onclick="selectSize(this)">XL</button>
+        </div>
+        <button class="add-cart-btn" onclick="addToCart(this, 'AV Boxing Tag Tee', '👕')" disabled>Select a Size</button>
+      </div>
+    </div>
+
+
+
+    <!-- ================================================================ -->
+    <!-- ADD MORE PRODUCTS: Copy one full product-card block above        -->
+    <!-- and paste it here to add another shirt                           -->
+    <!-- ================================================================ -->
+
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <span class="cart-title">Your Cart</span>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">Your cart is empty</div>
+  </div>
+  <div class="cart-footer">
+    <p class="cart-note">To complete your order, call us at (661) 947-3098 or DM @avboxingclub — we'll confirm availability and arrange payment.</p>
+    <button class="cart-checkout-btn" onclick="checkout()">📞 Contact to Order</button>
+  </div>
+</div>
+
+<div id="toast">✓ Added to Cart!</div>
+
+<footer>
+  <div class="foot-logo">AV <span>Boxing</span> Club</div>
+  <p class="foot-copy">© 2024 AV Boxing Club · 39360 3rd St E #207, Palmdale, CA 93550 · (661) 947-3098</p>
+  <ul class="foot-links">
+    <li><a href="index.html#shop">Shop</a></li>
+    <li><a href="index.html#membership">Train</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  // Scroll reveal
+  const obs = new IntersectionObserver(e => e.forEach(el => { if (el.isIntersecting) el.target.classList.add('in'); }), { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  // Cart state
+  let cart = [];
+
+  // Size selection — scoped to each card
+  function selectSize(btn) {
+    const card = btn.closest('.product-card');
+    card.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    const addBtn = card.querySelector('.add-cart-btn');
+    addBtn.disabled = false;
+    addBtn.textContent = 'Add to Cart';
+  }
+
+  // Add to cart
+  function addToCart(btn, name, emoji) {
+    const card = btn.closest('.product-card');
+    const sizeBtn = card.querySelector('.size-btn.selected');
+    if (!sizeBtn) return;
+    const size = sizeBtn.textContent;
+
+    cart.push({ name, size, emoji });
+    updateCartUI();
+
+    // Button feedback
+    btn.textContent = '✓ Added!';
+    btn.style.background = '#1a7a3c';
+    setTimeout(() => { btn.textContent = 'Add to Cart'; btn.style.background = ''; }, 2000);
+
+    // Toast
+    const toast = document.getElementById('toast');
+    toast.style.opacity = '1'; toast.style.transform = 'translateY(0)';
+    setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(12px)'; }, 2500);
+  }
+
+  // Update cart drawer and count
+  function updateCartUI() {
+    document.getElementById('cartCount').textContent = cart.length;
+    const itemsEl = document.getElementById('cartItems');
+    const emptyEl = document.getElementById('cartEmpty');
+
+    if (cart.length === 0) {
+      emptyEl.style.display = 'block';
+      // Remove all item divs
+      itemsEl.querySelectorAll('.cart-item').forEach(el => el.remove());
+    } else {
+      emptyEl.style.display = 'none';
+      itemsEl.querySelectorAll('.cart-item').forEach(el => el.remove());
+      cart.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <div class="cart-item-emoji">${item.emoji}</div>
+          <div class="cart-item-details">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-size">Size: ${item.size}</div>
+            <button class="cart-item-remove" onclick="removeItem(${i})">Remove</button>
+          </div>`;
+        itemsEl.appendChild(div);
+      });
+    }
+  }
+
+  function removeItem(index) {
+    cart.splice(index, 1);
+    updateCartUI();
+  }
+
+  function toggleCart() {
+    document.getElementById('cartDrawer').classList.toggle('open');
+    document.getElementById('cartOverlay').classList.toggle('open');
+  }
+
+  function checkout() {
+    if (cart.length === 0) return;
+    const items = cart.map(i => `${i.name} (${i.size})`).join(', ');
+    const msg = `Hi! I'd like to order: ${items}. Can you help me complete my purchase?`;
+    window.open(`https://www.instagram.com/avboxingclub`, '_blank');
+  }
+</script>
+</body>
+</html>
